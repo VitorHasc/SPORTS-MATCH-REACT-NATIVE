@@ -11,6 +11,7 @@ export default function FlatlistChat({ uOg }) {
   const [conversas, setConversas] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [groups, setGroups] = useState(null);
 
   const openModal = (user) => {
     setSelectedUser(user);
@@ -50,10 +51,10 @@ export default function FlatlistChat({ uOg }) {
     } else if (uOg === 2) {
       try {
         const curl = process.env.EXPO_PUBLIC_API_URL;
-        const url = `${curl}/messages/conversar`;
+        const url = `${curl}/groups/meus`;
         const resposta = await axios.get(url, config);
-        const arrumado = resposta.data.sort((a, b) => new Date(b.horario) - new Date(a.horario));
-        setConversas(arrumado);
+        console.log(resposta.data.grupos);
+        setGroups(resposta.data.grupos);
       } catch (error) {
         console.log(error);
       }
@@ -72,12 +73,35 @@ export default function FlatlistChat({ uOg }) {
 
   if (uOg === 2) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      </View>
+<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#ffffff', padding: 20 }}>
+  <FlatList
+    data={groups}
+    keyExtractor={(item) => item.id} // usa o id como chave única
+    renderItem={({ item }) => (
+      <TouchableOpacity
+        onPress={() => console.log(`Grupo: ${item.nome}`)}
+        style={{
+          padding: 15,
+          marginVertical: 10,
+          paddingHorizontal: 100,
+          backgroundColor: '#e0e0e0',
+          borderRadius: 15,
+        }}
+      >
+          <View>
+            <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 70 }}>{item.nome}</Text>
+            <Text style={{ fontSize: 16 }}>{item.descricao}</Text>
+            <TouchableOpacity onPress={() => pedidosend(item.idgrupo)} style={{ position: 'absolute', bottom: 10, right: 10 }}>
+                        </TouchableOpacity>
+          </View>
+      </TouchableOpacity>
+    )}
+    contentContainerStyle={{ alignItems: 'center' }} 
+  />
+</View>
     );
   }
-
-  if (uOg === 1) {
+  else if (uOg === 1) {
     return (
       <View style={{ flex: 1 }}>
         <FlatList
@@ -119,3 +143,4 @@ export default function FlatlistChat({ uOg }) {
     );
   }
 }
+

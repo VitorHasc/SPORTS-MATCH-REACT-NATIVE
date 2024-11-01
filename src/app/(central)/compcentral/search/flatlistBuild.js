@@ -5,7 +5,9 @@ import calcularIdade from '../../../compfunc/pegarIdade';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useState } from 'react';
 import Perfil from '../../(tabs)/profile/profile';
-import ModalMensagens from '../chat/modalMensagens'; 
+import ModalMensagens from '../chat/modalMensagens';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 export default function FlatlistBuild({ data, but, recall }) {
   const [fontsLoaded] = useFonts({
@@ -35,6 +37,26 @@ export default function FlatlistBuild({ data, but, recall }) {
     setSelectedUser(null);
   };
 
+  const pedidosend = async (grupoId) => {
+    try {
+      const grupo = {
+        grupoId
+      };
+      const token = await AsyncStorage.getItem('token');
+      const config = {
+        headers: {
+          'authorization': token,
+        },  
+      };
+      const curl = process.env.EXPO_PUBLIC_API_URL;
+      const url = curl + '/groups/pedido';
+      const respostaconfirm = await axios.post(url, grupo, config);
+      console.log(respostaconfirm)
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   if (but == 1) {
     try {
       const { usuarios } = data;
@@ -42,68 +64,66 @@ export default function FlatlistBuild({ data, but, recall }) {
       return (
         <View style={{ alignItems: 'center', marginTop: 50, flex: 1 }}>
           <FlatList
-  contentContainerStyle={{ alignSelf: 'flex-start' }}
-  numColumns={2}
-  data={usuarios}
-  keyExtractor={(item) => item.idusuario}
-  renderItem={({ item }) => {
-    const idade = calcularIdade(item.datanasc);
-    
-    // Verifica se a foto do perfil contém "cloudinary"
-    const imageUrl = item.perfilFoto.includes('cloudinary')
-      ? item.perfilFoto
-      : `${process.env.EXPO_PUBLIC_API_URL}/imagem/imagem?perfilFoto=${encodeURIComponent(item.perfilFoto)}`;
+            contentContainerStyle={{ alignSelf: 'flex-start' }}
+            numColumns={2}
+            data={usuarios}
+            keyExtractor={(item) => item.idusuario}
+            renderItem={({ item }) => {
+              const idade = calcularIdade(item.datanasc);
+              const imageUrl = item.perfilFoto.includes('cloudinary')
+                ? item.perfilFoto
+                : `${process.env.EXPO_PUBLIC_API_URL}/imagem/imagem?perfilFoto=${encodeURIComponent(item.perfilFoto)}`;
 
-    return (
-      <TouchableOpacity onPress={() => openPerfilModal(item)}>
-        <View style={[styles.card]}>
-          <ImageBackground source={{ uri: imageUrl }} style={{ paddingBottom: 300 }}>
-            <Text
-              style={{
-                position: 'absolute',
-                color: 'white',
-                top: 10,
-                marginLeft: 13,
-                fontSize: 25,
-                fontFamily: 'LeagueSpartan_400Regular',
-              }}
-            >
-              {item.nome}, {idade}
-            </Text>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                position: 'absolute',
-                top: 200,
-                left: 0,
-                right: 0,
-              }}
-            >
-              <TouchableOpacity onPress={() => openMensagensModal(item)} style={{ paddingLeft: 10 }}>
-                <View
-                  style={{
-                    backgroundColor: '#FFFFFF',
-                    borderRadius: 50,
-                    width: 45,
-                    height: 45,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                >
-                  <Icon name="message" color="#2FDC7A" size={30} />
-                </View>
-              </TouchableOpacity>
-            </View>
-          </ImageBackground>
-        </View>
-      </TouchableOpacity>
-    );
-  }}
-  onEndReached={recall}
-  onEndReachedThreshold={0.5}
-/>
+              return (
+                <TouchableOpacity onPress={() => openPerfilModal(item)}>
+                  <View style={[styles.card]}>
+                    <ImageBackground source={{ uri: imageUrl }} style={{ paddingBottom: 300 }}>
+                      <Text
+                        style={{
+                          position: 'absolute',
+                          color: 'white',
+                          top: 10,
+                          marginLeft: 13,
+                          fontSize: 25,
+                          fontFamily: 'LeagueSpartan_400Regular',
+                        }}
+                      >
+                        {item.nome}, {idade}
+                      </Text>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          position: 'absolute',
+                          top: 200,
+                          left: 0,
+                          right: 0,
+                        }}
+                      >
+                        <TouchableOpacity onPress={() => openMensagensModal(item)} style={{ paddingLeft: 10 }}>
+                          <View
+                            style={{
+                              backgroundColor: '#FFFFFF',
+                              borderRadius: 50,
+                              width: 45,
+                              height: 45,
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                            }}
+                          >
+                            <Icon name="message" color="#2FDC7A" size={30} />
+                          </View>
+                        </TouchableOpacity>
+                      </View>
+                    </ImageBackground>
+                  </View>
+                </TouchableOpacity>
+              );
+            }}
+            onEndReached={recall}
+            onEndReachedThreshold={0.5}
+          />
           {selectedUser && (
             <Modal
               visible={modalPerfilVisible}
@@ -114,7 +134,7 @@ export default function FlatlistBuild({ data, but, recall }) {
               <TouchableOpacity onPress={closePerfilModal}>
                 <Icon name="close" size={40}></Icon>
               </TouchableOpacity>
-                <Perfil id={selectedUser.idusuario} />
+              <Perfil id={selectedUser.idusuario} />
             </Modal>
           )}
           {selectedUser && (
@@ -139,7 +159,41 @@ export default function FlatlistBuild({ data, but, recall }) {
       return <View />;
     }
   } else if (but === 2) {
-    return <View />;
+    console.log("LA VEM!");
+    console.log(data.resposta);
+    return (
+      <FlatList
+        data={data.resposta}
+        keyExtractor={(item) => item.idgrupo.toString()}
+        renderItem={({ item }) => (
+          <View style={{
+            padding: 15,
+            marginVertical: 10,
+            marginHorizontal: 20,
+            backgroundColor: '#e0e0e0',
+            borderRadius: 15,
+          }}>
+            <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 70 }}>{item.nome}</Text>
+            <Text style={{ fontSize: 16 }}>{item.descricao}</Text>
+            
+            <TouchableOpacity onPress={() => pedidosend(item.idgrupo)} style={{ position: 'absolute', bottom: 10, right: 10 }}>
+                          <View
+                            style={{
+                              backgroundColor: '#2FDC7A',
+                              borderRadius: 20,
+                              width: 40,
+                              height: 40,
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                            }}
+                          >
+                            <Icon name="chevron-right" color="#FFFFFF" size={24} />
+                          </View>
+                        </TouchableOpacity>
+          </View>
+        )}
+      />
+    );
   }
 }
 
