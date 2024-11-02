@@ -175,12 +175,22 @@ export default function FlatlistBuild({ data, but, recall }) {
             overflow: 'hidden', // Garante que o ImageBackground respeite o borderRadius
           }}>
             <ImageBackground
-              source={{ uri: `../../../../../assets/${item.perfilFoto}` }}
-              style={{ width: '100%', height: '100%', justifyContent: 'flex-end', padding: 15 }} // Ocupar 100% da View
+              source={
+                item.perfilFoto ?
+                  parseInt(item.perfilFoto) === 1 ? require('../../../../../assets/12721210_2023-wabc-NewApp-SPORTS.jpg') :
+                    parseInt(item.perfilFoto) === 2 ? require('../../../../../assets/AdobeStock_286933595-Blog-Sport1-2000x936.jpeg') :
+                      parseInt(item.perfilFoto) === 3 ? require('../../../../../assets/depositphotos_135034544-stock-photo-boys-playing-soccer-young-football.jpg') :
+                        parseInt(item.perfilFoto) === 4 ? require('../../../../../assets/ea-sports-fc-25-e1725979411169.webp') :
+                          null
+                  : null
+              }
+              style={{ width: '100%', height: 200, justifyContent: 'flex-end' }} // Altura fixa para garantir consistência
               resizeMode="cover"
             >
-              <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white', marginBottom: 10 }}>{item.nome}</Text>
-              <Text style={{ fontSize: 16, color: 'white', marginBottom: 70 }}>{item.descricao}</Text>
+              <View style={{ padding: 15, position: 'absolute', bottom: 0, left: 0 }}>
+                <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white', marginBottom: 5 }}>{item.nome}</Text>
+                <Text style={{ fontSize: 16, color: 'white', marginBottom: 10 }}>{item.descricao}</Text>
+              </View>
 
               <TouchableOpacity onPress={() => pedidosend(item.idgrupo)} style={{ position: 'absolute', bottom: 10, right: 10 }}>
                 <View

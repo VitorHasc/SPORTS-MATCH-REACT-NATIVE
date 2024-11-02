@@ -184,19 +184,19 @@ export default function Flatlistsearch({ but, genero, idademin, idademax, esport
           {/* Seletor de fundo */}
           <Text style={styles.selectorText}>Escolha o fundo do grupo:</Text>
           <View style={styles.imageSelector}>
-            <TouchableOpacity onPress={() => setSelectedBackground('12721210_2023-wabc-NewApp-SPORTS.jpg')}>
+            <TouchableOpacity onPress={() => setSelectedBackground('1')}>
               <Image source={require('../../../../../assets/12721210_2023-wabc-NewApp-SPORTS.jpg')} style={[styles.image, selectedBackground === '12721210_2023-wabc-NewApp-SPORTS.jpg' && styles.selectedImage]} />
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => setSelectedBackground('AdobeStock_286933595-Blog-Sport1-2000x936.jpeg')}>
+            <TouchableOpacity onPress={() => setSelectedBackground('2')}>
               <Image source={require('../../../../../assets/AdobeStock_286933595-Blog-Sport1-2000x936.jpeg')} style={[styles.image, selectedBackground === 'AdobeStock_286933595-Blog-Sport1-2000x936.jpeg' && styles.selectedImage]} />
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => setSelectedBackground('depositphotos_135034544-stock-photo-boys-playing-soccer-young-football.jpg')}>
+            <TouchableOpacity onPress={() => setSelectedBackground('3')}>
               <Image source={require('../../../../../assets/depositphotos_135034544-stock-photo-boys-playing-soccer-young-football.jpg')} style={[styles.image, selectedBackground === 'depositphotos_135034544-stock-photo-boys-playing-soccer-young-football.jpg' && styles.selectedImage]} />
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => setSelectedBackground('ea-sports-fc-25-e1725979411169.webp')}>
+            <TouchableOpacity onPress={() => setSelectedBackground('4')}>
               <Image source={require('../../../../../assets/ea-sports-fc-25-e1725979411169.webp')} style={[styles.image, selectedBackground === 'ea-sports-fc-25-e1725979411169.webp' && styles.selectedImage]} />
             </TouchableOpacity>
           </View>

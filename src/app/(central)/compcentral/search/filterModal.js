@@ -108,14 +108,14 @@ export default function FilterModel({ modalVisible, setModalVisible, setGenero, 
                   onValueChange={(itemValue) => setEsporte(itemValue)}
                 >
                   <Picker.Item label="Nenhum" value="nenhum" />
-                  <Picker.Item label="Futebol" value="futebol" />
-                  <Picker.Item label="Vôlei" value="volei" />
+                  <Picker.Item label="futebol" value="futebol" />
+                  <Picker.Item label="Vôlei" value="vôlei" />
                   <Picker.Item label="Basquete" value="basquete" />
-                  <Picker.Item label="Tênis" value="tenis" />
+                  <Picker.Item label="Tênis" value="tênis" />
                   <Picker.Item label="Handebol" value="handebol" />
                   <Picker.Item label="Futsal" value="futsal" />
                   <Picker.Item label="Rugby" value="rugby" />
-                  <Picker.Item label="Natação" value="natacao" />
+                  <Picker.Item label="Natação" value="natação" />
                   <Picker.Item label="Jiu-Jitsu" value="jiu-jitsu" />
                   <Picker.Item label="Karate" value="karate" />
                   <Picker.Item label="Atletismo" value="atletismo" />
@@ -124,17 +124,17 @@ export default function FilterModel({ modalVisible, setModalVisible, setGenero, 
                   <Picker.Item label="Surf" value="surf" />
                   <Picker.Item label="Skate" value="skate" />
                   <Picker.Item label="Academia" value="academia" />
-                  <Picker.Item label="Hóquei" value="hoquei" />
-                  <Picker.Item label="Ginástica" value="ginastica" />
+                  <Picker.Item label="Hóquei" value="hóquei" />
+                  <Picker.Item label="Ginástica" value="ginástica" />
                   <Picker.Item label="Escalada" value="escalada" />
                   <Picker.Item label="Boxe" value="boxe" />
                   <Picker.Item label="Sinuca" value="sinuca" />
                   <Picker.Item label="Frescobol" value="frescobol" />
-                  <Picker.Item label="Tiro com Arco" value="tiro-arco" />
+                  <Picker.Item label="Tiro com Arco" value="tiro-com-arco" />
                   <Picker.Item label="Frisbee" value="frisbee" />
                   <Picker.Item label="Badminton" value="badminton" />
                   <Picker.Item label="Softbol" value="softbol" />
-                  <Picker.Item label="Críquete" value="criquete" />
+                  <Picker.Item label="Críquete" value="críquete" />
                   <Picker.Item label="Baseball" value="baseball" />
                   <Picker.Item label="Handebol" value="handebol" />
                   <Picker.Item label="Futebol Americano" value="futebol-americano" />

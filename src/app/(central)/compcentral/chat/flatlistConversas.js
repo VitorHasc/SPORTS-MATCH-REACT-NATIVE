@@ -141,22 +141,30 @@ export default function FlatlistChat({ uOg }) {
             <TouchableOpacity
               onPress={() => openModalGroup(item)}
               style={{
-                padding: 0, // Remover padding para o ImageBackground ocupar o espaço corretamente
+                padding: 0,
                 marginVertical: 10,
-                width: 300, // Defina a largura fixa que deseja
-                height: 200, // Defina uma altura fixa para garantir que o ImageBackground ocupe a área
+                width: 300,
+                height: 200,
                 backgroundColor: '#e0e0e0',
                 borderRadius: 15,
-                overflow: 'hidden', // Garante que o conteúdo respeite o borderRadius
+                overflow: 'hidden',
                 alignSelf: 'center',
               }}
             >
               <ImageBackground
-                source={{ uri: `../../../../../assets/${item.perfilFoto}` }}
-                style={{ width: '100%', height: '100%', justifyContent: 'flex-end', padding: 15 }} // Ocupar 100% do TouchableOpacity
+                source={
+                  item.perfilFoto ?
+                    parseInt(item.perfilFoto) === 1 ? require('../../../../../assets/12721210_2023-wabc-NewApp-SPORTS.jpg') :
+                      parseInt(item.perfilFoto) === 2 ? require('../../../../../assets/AdobeStock_286933595-Blog-Sport1-2000x936.jpeg') :
+                        parseInt(item.perfilFoto) === 3 ? require('../../../../../assets/depositphotos_135034544-stock-photo-boys-playing-soccer-young-football.jpg') :
+                          parseInt(item.perfilFoto) === 4 ? require('../../../../../assets/ea-sports-fc-25-e1725979411169.webp') :
+                            null
+                    : null
+                }
+                style={{ width: '100%', height: '100%', justifyContent: 'flex-end' }}
                 resizeMode="cover"
               >
-                <View style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
+                <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: 15 }}>
                   <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 5, color: '#fff' }}>{item.nome}</Text>
                   <Text style={{ color: '#fff' }}>{item.descricao}</Text>
                 </View>
@@ -177,15 +185,15 @@ export default function FlatlistChat({ uOg }) {
                 <TouchableOpacity onPress={closeModalGroup} style={{ marginBottom: 20 }}>
                   <Icon name="arrow-back" size={40} />
                 </TouchableOpacity>
-                <Text style={{ flex: 1, textAlign: 'center', fontSize:20, marginBottom: 20 }}><b>{selectedGroup.nome}</b></Text>
+                <Text style={{ flex: 1, textAlign: 'center', fontSize: 20, marginBottom: 20, fontWeight: 'bold' }}>{selectedGroup.nome}</Text>
                 {isAdm && (
                   <TouchableOpacity onPress={() => verPedidos(selectedGroup.idgrupo)} style={{ marginBottom: 20 }}>
-                    <Icon name="notifications" size={40}  />
+                    <Icon name="notifications" size={40} />
                   </TouchableOpacity>
                 )}
-                {!isAdm && ( 
+                {!isAdm && (
                   <TouchableOpacity>
-                    <Icon name="notifications" size={40} style={{color:"#fff"}} />
+                    <Icon name="notifications" size={40} style={{ color: "#fff" }} />
                   </TouchableOpacity>
                 )}
               </View>
@@ -263,9 +271,9 @@ export default function FlatlistChat({ uOg }) {
                   onPress={closeModal}
                   style={{ flex: 1, flexDirection: "row", alignItems: "center" }}
                 >
-                  <Icon name="arrow-back" size={40}/>
-                  <Text style={{ flex: 1, textAlign: 'center', fontSize:20 }}><b>{selectedUser.nome}</b></Text>
-                  <Icon name="arrow-back" size={40} style={{color:"#fff"}}/>
+                  <Icon name="arrow-back" size={40} />
+                  <Text style={{ flex: 1, textAlign: 'center', fontSize: 20, fontWeight: 'bold' }}>{selectedUser.nome}</Text>
+                  <Icon name="arrow-back" size={40} style={{ color: "#fff" }} />
                 </TouchableOpacity>
               </View>
               <ModalMensagens id={selectedUser.idusuario} />
