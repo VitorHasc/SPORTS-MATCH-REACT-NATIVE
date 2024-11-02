@@ -1,4 +1,4 @@
-import { Text, View, TouchableOpacity, Modal} from 'react-native';
+import { Text, View, TouchableOpacity, Modal } from 'react-native';
 import { useState } from 'react';
 import * as Animatable from 'react-native-animatable';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -22,7 +22,7 @@ export default function FilterModel({ modalVisible, setModalVisible, setGenero, 
           <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
             <Icon name="close" color='grey' size={40} />
           </TouchableOpacity>
-          
+
           <View style={{ flex: 1, justifyContent: 'center' }}>
             <TouchableOpacity onPress={() => setGeneroModal(true)}>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 20, width: '100%' }}>
@@ -109,8 +109,36 @@ export default function FilterModel({ modalVisible, setModalVisible, setGenero, 
                 >
                   <Picker.Item label="Nenhum" value="nenhum" />
                   <Picker.Item label="Futebol" value="futebol" />
+                  <Picker.Item label="Vôlei" value="volei" />
                   <Picker.Item label="Basquete" value="basquete" />
                   <Picker.Item label="Tênis" value="tenis" />
+                  <Picker.Item label="Handebol" value="handebol" />
+                  <Picker.Item label="Futsal" value="futsal" />
+                  <Picker.Item label="Rugby" value="rugby" />
+                  <Picker.Item label="Natação" value="natacao" />
+                  <Picker.Item label="Jiu-Jitsu" value="jiu-jitsu" />
+                  <Picker.Item label="Karate" value="karate" />
+                  <Picker.Item label="Atletismo" value="atletismo" />
+                  <Picker.Item label="Ciclismo" value="ciclismo" />
+                  <Picker.Item label="Golfe" value="golfe" />
+                  <Picker.Item label="Surf" value="surf" />
+                  <Picker.Item label="Skate" value="skate" />
+                  <Picker.Item label="Academia" value="academia" />
+                  <Picker.Item label="Hóquei" value="hoquei" />
+                  <Picker.Item label="Ginástica" value="ginastica" />
+                  <Picker.Item label="Escalada" value="escalada" />
+                  <Picker.Item label="Boxe" value="boxe" />
+                  <Picker.Item label="Sinuca" value="sinuca" />
+                  <Picker.Item label="Frescobol" value="frescobol" />
+                  <Picker.Item label="Tiro com Arco" value="tiro-arco" />
+                  <Picker.Item label="Frisbee" value="frisbee" />
+                  <Picker.Item label="Badminton" value="badminton" />
+                  <Picker.Item label="Softbol" value="softbol" />
+                  <Picker.Item label="Críquete" value="criquete" />
+                  <Picker.Item label="Baseball" value="baseball" />
+                  <Picker.Item label="Handebol" value="handebol" />
+                  <Picker.Item label="Futebol Americano" value="futebol-americano" />
+                  <Picker.Item label="Bocha" value="bocha" />
                 </Picker>
               </View>
             </Animatable.View>

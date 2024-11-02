@@ -27,7 +27,7 @@ export default function Chat() {
         </TouchableOpacity>
       </View>
       <GestureHandlerRootView style={{ flex: 1 }}>
-      <FlatlistChat uOg={button} />
+        <FlatlistChat uOg={button} />
       </GestureHandlerRootView>
     </View>
   );

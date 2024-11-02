@@ -4,14 +4,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-export default function ModalMensagens({ id }) {
-  const [mensagens, setMensagens] = useState([]);
+export default function ModalMensagens({ id}) {
+  const [mensagens, setMensagens] = useState({ resposta: [] });
   const flatListRef = useRef(null);
-  const [mensagemEnviar, setMensagemEnviar] = useState([null]);
-
+  const [mensagemEnviar, setMensagemEnviar] = useState("");
+  const [isAtBottom, setIsAtBottom] = useState(true); // Estado para rastrear se está na parte inferior
 
   const enviarMensagem = async () => {
-    if(mensagemEnviar!=""){
+    if (mensagemEnviar !== "") {
       try {
         const token = await AsyncStorage.getItem('token');
         const config = {
@@ -21,56 +21,66 @@ export default function ModalMensagens({ id }) {
         };
         const data = {
           idalvo: id,
-          texto: mensagemEnviar
+          texto: mensagemEnviar,
         };
         const curl = process.env.EXPO_PUBLIC_API_URL;
         const url = `${curl}/messages/mensagens`;
-        const resposta = await axios.post(url, data, config);
-        console.log(resposta);
+        await axios.post(url, data, config);
         setMensagemEnviar("");
+        fetchMensagens(); // Recarregar mensagens após enviar uma nova
       } catch (error) {
         console.error('Erro ao enviar mensagem:', error);
       }
     }
   };
 
-  useEffect(() => {
-    const fetchMensagens = async () => {
-      try {
-        const token = await AsyncStorage.getItem('token');
-        const config = {
-          headers: {
-            'Authorization': token,
-          },
-        };
-        const data = {
-          idalvo: id,
-        };
-        const curl = process.env.EXPO_PUBLIC_API_URL;
-        const url = `${curl}/messages/mensagenspeg`;
-        const resposta = await axios.post(url, data, config);
-        console.log(resposta.data.resposta);
-        setMensagens(resposta.data);
-        console.log(mensagens.resposta)
-        console.log("AAAAAAAAA")
-      } catch (error) {
-        console.log(error);
-      }
-    };
+  const fetchMensagens = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const config = {
+        headers: {
+          'Authorization': token,
+        },
+      };
+      const data = {
+        idalvo: id,
+      };
+      const curl = process.env.EXPO_PUBLIC_API_URL;
+      const url = `${curl}/messages/mensagenspeg`;
+      const resposta = await axios.post(url, data, config);
+      setMensagens(resposta.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
+  useEffect(() => {
     fetchMensagens();
     const intervalId = setInterval(fetchMensagens, 200);
     return () => clearInterval(intervalId);
   }, [id]);
+
+  // Scrollar para o final da lista ao carregar as mensagens, se o usuário estiver na parte inferior
+  useEffect(() => {
+    if (flatListRef.current && mensagens.resposta.length > 0 && isAtBottom) {
+      flatListRef.current.scrollToEnd({ animated: true });
+    }
+  }, [mensagens]);
+
+  const onScroll = (event) => {
+    const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
+    const isAtBottom = layoutMeasurement.height + contentOffset.y >= contentSize.height - 20; // 20 para um pouco de margem
+    setIsAtBottom(isAtBottom);
+  };
 
   return (
     <View style={{ flex: 1, padding: 10 }}>
       <FlatList
         ref={flatListRef}
         data={mensagens.resposta}
-        keyExtractor={item => item.idmensagem}
+        keyExtractor={item => item.idmensagem.toString()}
         renderItem={({ item }) => {
-          const isSentByUser = item.remetenteId == mensagens.idusuario;
+          const isSentByUser = item.remetenteId === mensagens.idusuario;
           return (
             <View
               style={{
@@ -89,6 +99,8 @@ export default function ModalMensagens({ id }) {
           );
         }}
         contentContainerStyle={{ paddingBottom: 10 }}
+        onScroll={onScroll} // Rastreia a rolagem
+        scrollEventThrottle={16} // Para um desempenho mais suave
       />
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <TextInput
@@ -105,13 +117,14 @@ export default function ModalMensagens({ id }) {
           }}
           placeholder="Digite uma mensagem..."
         />
-        <TouchableOpacity style={{ padding: 10 }} onPress={() => enviarMensagem(mensagemEnviar)}>
+        <TouchableOpacity style={{ padding: 10 }} onPress={enviarMensagem}>
           <Icon name="send" size={30} color="#20B761" />
         </TouchableOpacity>
       </View>
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

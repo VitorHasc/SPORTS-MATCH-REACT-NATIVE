@@ -1,4 +1,4 @@
-import { Text, View, TextInput, TouchableOpacity, Modal, StyleSheet } from 'react-native';
+import { Text, View, TextInput, TouchableOpacity, Modal, StyleSheet, FlatList, Image } from 'react-native';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import FlatlistBuild from './flatlistBuild';
@@ -13,6 +13,7 @@ export default function Flatlistsearch({ but, genero, idademin, idademax, esport
   const [modalVisible, setModalVisible] = useState(false);
   const [groupName, setGroupName] = useState('');
   const [groupDescription, setGroupDescription] = useState('');
+  const [selectedBackground, setSelectedBackground] = useState(null);
 
   const api = async (pagina) => {
     if (esporte === 'nenhum') {
@@ -48,10 +49,10 @@ export default function Flatlistsearch({ but, genero, idademin, idademax, esport
 
     try {
       const novaresposta = await axios.post(url, data, config);
-      console.log("SOCORROOOOOOOO")
-      console.log(novaresposta)
+      console.log("SOCORROOOOOOOO");
+      console.log(novaresposta);
       setResposta(prevResposta => {
-        if (pagina == 1) {
+        if (pagina === 1) {
           return {
             data: {
               usuarios: novaresposta.data.usuarios || []
@@ -74,16 +75,16 @@ export default function Flatlistsearch({ but, genero, idademin, idademax, esport
         }
       });
     } catch (error) {
-      console.log("TUDO ERRADO")
+      console.log("TUDO ERRADO");
       console.error(error);
     }
-  }
+  };
 
   const api2 = async () => {
     const curl = process.env.EXPO_PUBLIC_API_URL;
     const url = curl + '/groups/search';
     const token = await AsyncStorage.getItem('token');
-    console.log("EITA EITA")
+    console.log("EITA EITA");
     try {
       const config = {
         headers: {
@@ -96,7 +97,7 @@ export default function Flatlistsearch({ but, genero, idademin, idademax, esport
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   const recall = () => {
     console.log("chegou no fim!");
@@ -105,7 +106,7 @@ export default function Flatlistsearch({ but, genero, idademin, idademax, esport
       api(nextPage);
       return nextPage;
     });
-  }
+  };
 
   const createGroup = async () => {
     const token = await AsyncStorage.getItem('token');
@@ -118,6 +119,7 @@ export default function Flatlistsearch({ but, genero, idademin, idademax, esport
     const data = {
       nome: groupName,
       descricao: groupDescription,
+      fundo: selectedBackground // Adiciona a imagem de fundo
     };
 
     const curl = process.env.EXPO_PUBLIC_API_URL;
@@ -129,6 +131,7 @@ export default function Flatlistsearch({ but, genero, idademin, idademax, esport
       // Limpar os campos e fechar o modal após a criação do grupo
       setGroupName('');
       setGroupDescription('');
+      setSelectedBackground(null); 
       setModalVisible(false);
     } catch (error) {
       console.error('Erro ao criar grupo:', error);
@@ -136,10 +139,10 @@ export default function Flatlistsearch({ but, genero, idademin, idademax, esport
   };
 
   useEffect(() => {
-    if (but == 1) {
+    if (but === 1) {
       setPagina(1);
       api(1);
-    } else if (but == 2) {
+    } else if (but === 2) {
       api2(1);
     }
   }, [but, genero, idademin, idademax, esporte]);
@@ -157,8 +160,6 @@ export default function Flatlistsearch({ but, genero, idademin, idademax, esport
           <Icon name="add" color="#ffff" size={30} />
         </TouchableOpacity>
       )}
-
-      {/* Modal para criação de grupo */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -179,6 +180,27 @@ export default function Flatlistsearch({ but, genero, idademin, idademax, esport
             onChangeText={setGroupDescription}
             style={styles.input}
           />
+
+          {/* Seletor de fundo */}
+          <Text style={styles.selectorText}>Escolha o fundo do grupo:</Text>
+          <View style={styles.imageSelector}>
+            <TouchableOpacity onPress={() => setSelectedBackground('12721210_2023-wabc-NewApp-SPORTS.jpg')}>
+              <Image source={require('../../../../../assets/12721210_2023-wabc-NewApp-SPORTS.jpg')} style={[styles.image, selectedBackground === '12721210_2023-wabc-NewApp-SPORTS.jpg' && styles.selectedImage]} />
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => setSelectedBackground('AdobeStock_286933595-Blog-Sport1-2000x936.jpeg')}>
+              <Image source={require('../../../../../assets/AdobeStock_286933595-Blog-Sport1-2000x936.jpeg')} style={[styles.image, selectedBackground === 'AdobeStock_286933595-Blog-Sport1-2000x936.jpeg' && styles.selectedImage]} />
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => setSelectedBackground('depositphotos_135034544-stock-photo-boys-playing-soccer-young-football.jpg')}>
+              <Image source={require('../../../../../assets/depositphotos_135034544-stock-photo-boys-playing-soccer-young-football.jpg')} style={[styles.image, selectedBackground === 'depositphotos_135034544-stock-photo-boys-playing-soccer-young-football.jpg' && styles.selectedImage]} />
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => setSelectedBackground('ea-sports-fc-25-e1725979411169.webp')}>
+              <Image source={require('../../../../../assets/ea-sports-fc-25-e1725979411169.webp')} style={[styles.image, selectedBackground === 'ea-sports-fc-25-e1725979411169.webp' && styles.selectedImage]} />
+            </TouchableOpacity>
+          </View>
+
           <TouchableOpacity
             onPress={createGroup} // Chamada da função de criar grupo
             style={styles.submitButton}
@@ -238,7 +260,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   submitButton: {
-    backgroundColor: '#007BFF',
+    backgroundColor: '#2FDC7A',
     padding: 10,
     borderRadius: 5,
     width: '100%',
@@ -250,7 +272,7 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     marginTop: 10,
-    backgroundColor: '#FF6347', // Cor do botão fechar
+    backgroundColor: '#000', // Cor do botão fechar
     padding: 10,
     borderRadius: 5,
     width: '100%',
@@ -259,5 +281,31 @@ const styles = StyleSheet.create({
   closeButtonText: {
     color: '#fff',
     fontSize: 16,
+  },
+  selectorText: {
+    color: '#fff',
+    marginVertical: 10,
+    fontSize: 16,
+  },
+  imageSelector: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    marginBottom: 40,
+  },
+  image: {
+    width: 70,
+    height: 70,
+    marginHorizontal: 5,
+    borderWidth: 2, // Largura da borda
+    borderColor: 'black', // Cor da borda
+  },
+  selectedImage: {
+    borderColor: 'white', // Borda branca quando a imagem é selecionada
+  },
+  selectorText: {
+    color: '#fff',
+    fontSize: 18,
+    marginBottom: 10,
   },
 });

@@ -46,7 +46,7 @@ export default function FlatlistBuild({ data, but, recall }) {
       const config = {
         headers: {
           'authorization': token,
-        },  
+        },
       };
       const curl = process.env.EXPO_PUBLIC_API_URL;
       const url = curl + '/groups/pedido';
@@ -167,29 +167,36 @@ export default function FlatlistBuild({ data, but, recall }) {
         keyExtractor={(item) => item.idgrupo.toString()}
         renderItem={({ item }) => (
           <View style={{
-            padding: 15,
+            padding: 0, // Remove o padding interno
             marginVertical: 10,
             marginHorizontal: 20,
             backgroundColor: '#e0e0e0',
             borderRadius: 15,
+            overflow: 'hidden', // Garante que o ImageBackground respeite o borderRadius
           }}>
-            <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 70 }}>{item.nome}</Text>
-            <Text style={{ fontSize: 16 }}>{item.descricao}</Text>
-            
-            <TouchableOpacity onPress={() => pedidosend(item.idgrupo)} style={{ position: 'absolute', bottom: 10, right: 10 }}>
-                          <View
-                            style={{
-                              backgroundColor: '#2FDC7A',
-                              borderRadius: 20,
-                              width: 40,
-                              height: 40,
-                              justifyContent: 'center',
-                              alignItems: 'center',
-                            }}
-                          >
-                            <Icon name="chevron-right" color="#FFFFFF" size={24} />
-                          </View>
-                        </TouchableOpacity>
+            <ImageBackground
+              source={{ uri: `../../../../../assets/${item.perfilFoto}` }}
+              style={{ width: '100%', height: '100%', justifyContent: 'flex-end', padding: 15 }} // Ocupar 100% da View
+              resizeMode="cover"
+            >
+              <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white', marginBottom: 10 }}>{item.nome}</Text>
+              <Text style={{ fontSize: 16, color: 'white', marginBottom: 70 }}>{item.descricao}</Text>
+
+              <TouchableOpacity onPress={() => pedidosend(item.idgrupo)} style={{ position: 'absolute', bottom: 10, right: 10 }}>
+                <View
+                  style={{
+                    backgroundColor: '#2FDC7A',
+                    borderRadius: 20,
+                    width: 40,
+                    height: 40,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Icon name="chevron-right" color="#FFFFFF" size={24} />
+                </View>
+              </TouchableOpacity>
+            </ImageBackground>
           </View>
         )}
       />
