@@ -526,10 +526,11 @@ export default function ComponenteCad() {
         break;
       case 8:
         setAlter(alter + 1);
-        break;
-      case 9:
         await cadApi();
         router.replace("/entrar");
+        break;
+      case 9:
+
         break;
       default:
         break;

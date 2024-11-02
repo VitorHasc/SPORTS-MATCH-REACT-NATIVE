@@ -19,7 +19,7 @@ export default function Index() {
       try {
         console.log("tentando pegar o token");
         const token = await AsyncStorage.getItem('token');
-        if (!token) {
+        if (token) {
           console.log("tentando pegar o token");
           const config = {
             headers: {
